@@ -7,14 +7,14 @@ function _normalizeVulnerabilities(auditResult) {
   };
   for (const key in auditResult.vulnerabilities) {
     const packageInfo = auditResult.vulnerabilities[key];
-    const normalizedPackage = _normalizePackage(packageInfo);
+    const normalizedPackage = _normalizePackage(packageInfo, auditResult.vulnerabilities);
     if (normalizedPackage) {
       result[normalizedPackage.severity].push(normalizedPackage);
     }
   }
   return result;
 
-  function _normalizePackage(packageInfo) {
+  function _normalizePackage(packageInfo, allVulnerabilities) {
     const { via = [] } = packageInfo;
     const validVia = via.filter((it) => typeof it === 'object');
     if (validVia.length === 0) {
@@ -27,10 +27,44 @@ function _normalizeVulnerabilities(auditResult) {
       nodes: packageInfo.nodes || [],
       fixAvailable: packageInfo.fixAvailable || null
     };
-    // 简化实现：使用nodes作为依赖链信息
-    // 使用原始的依赖链信息，而不是文件路径信息
-    info.depChains = packageInfo.depChains || [];
+    
+    // 构建完整的依赖链：从当前包开始，通过effects字段向上追踪
+    info.depChains = _buildDependencyChains(packageInfo.name, allVulnerabilities);
     return info;
+  }
+  
+  function _buildDependencyChains(packageName, allVulnerabilities) {
+    const chains = [];
+    const visited = new Set();
+    
+    function dfs(currentName, path) {
+      // 避免循环依赖
+      if (visited.has(currentName)) {
+        chains.push(path);
+        return;
+      }
+      
+      visited.add(currentName);
+      const currentPackage = allVulnerabilities[currentName];
+      
+      // 如果没有effects或者effects为空，说明已经到达顶层依赖
+      if (!currentPackage || !currentPackage.effects || currentPackage.effects.length === 0) {
+        chains.push(path);
+        visited.delete(currentName);
+        return;
+      }
+      
+      // 遍历所有上层依赖
+      currentPackage.effects.forEach(effectName => {
+        dfs(effectName, [effectName, ...path]);
+      });
+      
+      visited.delete(currentName);
+    }
+    
+    // 从当前包开始构建依赖链
+    dfs(packageName, [packageName]);
+    return chains;
   }
 }
 

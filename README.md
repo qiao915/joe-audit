@@ -77,7 +77,7 @@ joe-audit https://github.com/yourusername/your-repo -o repo-audit.md
 | 参数 | 简写 | 描述 |
 |------|------|------|
 | `<target>` | - | 审计目标，可以是本地目录路径或远程仓库URL |
-| `--output <filename>` | `-o` | 自定义审计报告输出文件名 |
+| `--output <filename>` | `-o` | 自定义审计报告输出文件名<br/>默认: joe-audit-result.md |
 | `--help` | `-h` | 显示帮助信息 |
 | `--version` | `-v` | 显示当前版本 |
 

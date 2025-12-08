@@ -19,7 +19,7 @@ joe-audit v${version}
   joe-audit [选项] [目标]
 
 选项：
-  -o, --output <文件名>   自定义审计报告输出文件名
+  -o, --output <文件名>    自定义审计报告输出文件名, 默认: joe-audit-result.md
   -h, --help              显示帮助信息
   -v, --version           显示当前版本
 
