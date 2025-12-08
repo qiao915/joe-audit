@@ -1,0 +1,32 @@
+# 排除测试文件和目录
+**/test/
+**/test/**
+**/*test*.js
+**/*Test*.js
+
+# 排除临时文件和目录
+*.tmp
+*.temp
+
+# 排除编辑器配置文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 排除Git相关文件
+.git/
+.gitignore
+
+# 排除环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 排除构建产物和日志文件
+logs/
+*.log
+
+# 排除其他非必要文件
+comprehensive-test.js
+module-usage-example.js

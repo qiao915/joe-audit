@@ -19,7 +19,7 @@ joe-audit v${version}
   joe-audit [选项] [目标]
 
 选项：
-  -o, --output <文件名>    自定义审计报告输出文件名, 默认: joe-audit-result.md
+  -o, --output <文件名>    自定义审计报告输出文件名, 默认: joe-audit-result-YYYYMMDDHHMMSS.md
   -h, --help              显示帮助信息
   -v, --version           显示当前版本
 
@@ -55,10 +55,22 @@ if (args.includes('--help') || args.includes('-h')) {
   process.exit(0);
 }
 
+// 生成带时间戳的默认输出文件名
+function generateDefaultOutputFilename() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  return `joe-audit-result-${year}${month}${day}${hours}${minutes}${seconds}.md`;
+}
+
 // 处理命令行参数
 async function processArgs() {
   let targetPath = '.';
-  let outputFile = 'joe-audit-result.md';
+  let outputFile = generateDefaultOutputFilename();
   let isRemote = false;
 
   // 解析参数

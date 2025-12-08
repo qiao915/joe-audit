@@ -77,7 +77,7 @@ joe-audit https://github.com/yourusername/your-repo -o repo-audit.md
 | 参数 | 简写 | 描述 |
 |------|------|------|
 | `<target>` | - | 审计目标，可以是本地目录路径或远程仓库URL |
-| `--output <filename>` | `-o` | 自定义审计报告输出文件名<br/>默认: joe-audit-result.md |
+| `--output <filename>` | `-o` | 自定义审计报告输出文件名<br/>默认: joe-audit-result-YYYYMMDDHHMMSS.md |
 | `--help` | `-h` | 显示帮助信息 |
 | `--version` | `-v` | 显示当前版本 |
 
@@ -115,7 +115,6 @@ await auditPackage('https://github.com/yourusername/your-repo', 'repo-audit.md')
 ## 审计报告格式
 
 生成的Markdown报告包含以下内容：
-
 - 项目名称和审计标题
 - 审计结果摘要
 - 漏洞详情（如果有）：
@@ -136,34 +135,9 @@ await auditPackage('https://github.com/yourusername/your-repo', 'repo-audit.md')
 所有直接依赖和间接依赖都通过了安全审计。
 ```
 
-## 技术栈
-
-- Node.js
-- npm audit
-- EJS模板引擎
-- path/url处理模块
-
-## 开发
-
-### 安装依赖
-
-```bash
-npm install
-```
-
-### 运行测试
-
-```bash
-node test-audit.js
-```
-
 ## 许可证
-
 ISC
 
-## 作者
-
-Joe
 
 ## 贡献
 
@@ -174,10 +148,3 @@ Joe
 如果在使用过程中遇到任何问题，请在GitHub仓库提交Issue：
 [https://github.com/qiao915/joe-audit/issues](https://github.com/qiao915/joe-audit/issues)
 
-## Changelog
-
-### v1.0.0
-- 初始版本发布
-- 支持本地目录和远程仓库审计
-- 提供命令行界面和API接口
-- 生成Markdown格式审计报告

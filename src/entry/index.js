@@ -11,6 +11,17 @@ import fs from 'fs';
  * @param {string} savePath 保存审计结果的文件名，审计结果是一个标准格式的markdown字符串
  */
 export async function auditPackage(projectRoot, savePath) {
+  // 如果没有提供savePath，则生成带时间戳的默认文件名
+  if (!savePath) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    savePath = `joe-audit-result-${year}${month}${day}-${hours}${minutes}${seconds}.md`;
+  }
   // 1. 创建工作目录
   console.log('🔄 创建临时工作目录...');
   const workDir = await createWorkDir();

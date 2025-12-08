@@ -1,6 +1,6 @@
 {
   "name": "joe-audit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/entry/index.js",
   "type": "module",
   "bin": {
@@ -33,5 +33,23 @@
   },
   "dependencies": {
     "ejs": "^3.1.10"
-  }
+  },
+  "files": [
+    "src/audit/index.js",
+    "src/audit/normalizeAuditResult.js",
+    "src/audit/npmAudit.js",
+    "src/common/utils.js",
+    "src/entry/index.js",
+    "src/generateLock/generateLock.js",
+    "src/generateLock/index.js",
+    "src/parseProject/index.js",
+    "src/parseProject/parseLocalProject.js",
+    "src/parseProject/parseRemoteProject.js",
+    "src/render/index.js",
+    "src/render/markdown.js",
+    "src/render/template/",
+    "src/workDir/index.js",
+    "cli.js",
+    "README.md"
+  ]
 }
