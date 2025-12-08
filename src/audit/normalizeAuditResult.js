@@ -28,7 +28,8 @@ function _normalizeVulnerabilities(auditResult) {
       fixAvailable: packageInfo.fixAvailable || null
     };
     // 简化实现：使用nodes作为依赖链信息
-    info.depChains = packageInfo.nodes ? [packageInfo.nodes] : [];
+    // 使用原始的依赖链信息，而不是文件路径信息
+    info.depChains = packageInfo.depChains || [];
     return info;
   }
 }

@@ -1,42 +1,31 @@
 ### `<%- item.name -%>`
-
 **漏洞描述**：
-<% item.problems.forEach((problem) => { %>
-- <%- problem.title %>
+<% item.problems.forEach((problem) => { %>- <%- problem.title %>
   - npm漏洞编号：`<%- problem.source %>`
   - 漏洞详细说明：<%- problem.url %>
   - 漏洞等级：<%- desc.severityLevels[problem.severity] %>
   - 受影响的版本：`<%- problem.range %>`
 <% }); %>
-
 **依赖关系**：
 <% if(item.depChains.length === 0) { %>
-<% if(item.name === packageJson.name) { %>
-当前工程
-<% } else { %>
-- `<%- packageJson.name %>` / <%- item.name %>
+<% if(item.name === packageJson.name) { %>当前工程
+<% } else { %>- `<%- packageJson.name %>/<%- item.name %>`
 <% } %>
 <% } else { %>
 <% item.depChains.forEach((chain) => { %>
-<% if(chain.length === 1 && chain[0] === packageJson.name) { %>
-当前工程
-<% } else { %>
-- `<%- packageJson.name %>` / <%- chain.map(c=>`\`${c}\``).join(' / ') %>
+<% if(chain.length === 1 && chain[0] === packageJson.name) { %>当前工程
+<% } else { %>- `<%- packageJson.name %>/<%- chain.join('/') %>`
 <% } %>
-  <% }); %>
-  <% } %>
-
-**漏洞包所在目录**：
-<% item.nodes.forEach((path) => { %>
-- `<%- path %>`
 <% }); %>
-
+<% } %>
+**漏洞包所在目录**：
+<% item.nodes.forEach((path) => { %>- `<%- path %>`
+<% }); %>
 <% if (item.fixAvailable) { %>
 **修复建议**：
 - 将 `<%- item.name %>` 更新到版本 `<%- item.fixAvailable.version %>`
-  <% if (item.fixAvailable.isSemVerMajor) { %>
-- 注意：这是一个主版本升级，可能包含不兼容的更改
-  <% } %>
+<% if (item.fixAvailable.isSemVerMajor) { %>- 注意：这是一个主版本升级，可能包含不兼容的更改
+<% } %>
 <% } else { %>
 **修复建议**：
 - 目前没有自动修复建议，请关注官方公告或社区解决方案

@@ -1,13 +1,11 @@
 # `<%- packageJson.name %>`审计结果
 
 ## 检测目标
-
 <% if (targetPath.startsWith('http://') || targetPath.startsWith('https://')) { %>
 **链接地址:** <%- targetPath %>
 <% } else { %>
-**文件路径:** <%- targetPath %>
+**文件路径:** `<%- targetPath %>`
 <% } %>
-
 <% if(audit.summary.total) { %>
 <%- include('./audit.ejs'); %>
 <%- include('./recommendations.ejs'); %>
