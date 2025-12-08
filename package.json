@@ -1,0 +1,37 @@
+{
+  "name": "joe-audit",
+  "version": "1.0.0",
+  "main": "src/entry/index.js",
+  "type": "module",
+  "bin": {
+    "joe-audit": "./cli.js",
+    "joeaudit": "./cli.js",
+    "joeAudit": "./cli.js",
+    "JoeAudit": "./cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "security-audit",
+    "dependency-audit",
+    "npm-audit",
+    "joe-audit",
+    "joeaudit",
+    "joe",
+    "audit",
+    "security",
+    "dependency",
+    "npm"
+  ],
+  "author": "qiao_915@yean.net",
+  "license": "ISC",
+  "description": "A security dependency audit tool for local and remote projects",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qiao915/joe-audit.git"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10"
+  }
+}
