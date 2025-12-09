@@ -28,6 +28,27 @@ export async function auditPackage(projectRoot, savePath) {
     stopOnComplete: true
   });
   
+  // 定义旋转动画字符序列
+  const spinChars = ['|', '/', '-', '\\'];
+  let spinIndex = 0;
+  
+  // 旋转动画函数
+  function startSpinAnimation(stage, originalMessage) {
+    const interval = setInterval(() => {
+      const spinChar = spinChars[spinIndex];
+      spinIndex = (spinIndex + 1) % spinChars.length;
+      // 更新进度条的message，添加旋转动画字符
+      progressBar.update(currentStep, {
+        stage: stage,
+        message: `${originalMessage} ${spinChar}`
+      });
+    }, 200);
+    
+    return () => {
+      clearInterval(interval);
+    };
+  }
+  
   const totalSteps = 7;
   let currentStep = 0;
   
@@ -48,30 +69,51 @@ export async function auditPackage(projectRoot, savePath) {
     
     // 2. 解析项目，向工作目录添加package.json
     currentStep++;
+    const step2Message = '解析项目结构和依赖信息';
     progressBar.update(currentStep, {
       stage: '步骤 2/7',
-      message: '解析项目结构和依赖信息'
+      message: step2Message
     });
+    const stopAnimation2 = startSpinAnimation('步骤 2/7', step2Message);
     const packageJson = await parseProject(projectRoot);
+    stopAnimation2();
+    progressBar.update(currentStep, {
+      stage: '步骤 2/7',
+      message: `${step2Message} ✅`
+    });
     
     // 判断是否是远程仓库
     const isRemote = typeof projectRoot === 'string' && (projectRoot.startsWith('http://') || projectRoot.startsWith('https://'));
     
-    // 3. 生成lock文件
+    // 3. 生成依赖锁定文件
     currentStep++;
+    const step3Message = '生成依赖锁定文件';
     progressBar.update(currentStep, {
       stage: '步骤 3/7',
-      message: '生成依赖锁定文件'
+      message: step3Message
     });
+    const stopAnimation3 = startSpinAnimation('步骤 3/7', step3Message);
     await generateLock(workDir, packageJson, isRemote ? projectRoot : null);
+    stopAnimation3();
+    progressBar.update(currentStep, {
+      stage: '步骤 3/7',
+      message: `${step3Message} ✅`
+    });
     
     // 4. 对工作目录进行审计
     currentStep++;
+    const step4Message = '执行安全审计';
     progressBar.update(currentStep, {
       stage: '步骤 4/7',
-      message: '执行安全审计（可能需要较长时间）'
+      message: step4Message
     });
+    const stopAnimation4 = startSpinAnimation('步骤 4/7', step4Message);
     const auditResult = await audit(workDir, packageJson);
+    stopAnimation4();
+    progressBar.update(currentStep, {
+      stage: '步骤 4/7',
+      message: `${step4Message} ✅`
+    });
     
     // 5. 渲染审计结果
     currentStep++;
