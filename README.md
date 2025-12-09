@@ -1,103 +1,101 @@
 # joe-audit
 
-A security dependency audit tool for local and remote projects
+A lightweight security dependency audit tool for frontend projects, built on npm audit, providing a clean command-line interface and standard Markdown audit reports.
 
-一个轻量级的前端依赖安全审计工具，基于npm audit构建，提供简洁的命令行界面和标准的Markdown格式审计报告。
+## Features
 
-## 功能特性
+- ✅ **Fast Installation**: One-click installation via npm
+- ✅ **Command-line Interface**: Intuitive and easy-to-use CLI tool
+- ✅ **Interactive Operation**: Supports parameter-less query mode
+- ✅ **Multi-target Support**: Local directory and remote repository auditing
+- ✅ **Custom Output**: Support for specifying audit report filenames
+- ✅ **Markdown Reports**: Generate standardized audit result documents
+- ✅ **npm audit Integration**: Use npm's official audit functionality
+- ✅ **Real-time Progress Display**: Dynamically show audit progress and current stage
+- ✅ **Animation Effects**: Provide smooth rotation animations to enhance user experience
 
-- ✅ **快速安装**：通过npm一键安装
-- ✅ **命令行界面**：直观易用的CLI工具
-- ✅ **交互式操作**：支持无参数询问模式
-- ✅ **多目标支持**：本地目录和远程仓库审计
-- ✅ **自定义输出**：支持指定审计报告文件名
-- ✅ **Markdown报告**：生成标准化的审计结果文档
-- ✅ **npm audit集成**：使用npm的官方审计功能
-- ✅ **实时进度展示**：动态显示审计进度和当前阶段
-- ✅ **动画效果**：提供流畅的旋转动画，增强用户体验
+## System Requirements
 
-## 系统要求
+- **Node.js**: v14.13.0 or higher (supports ES modules)
+- **Dependencies**: Only `ejs` is required as a template engine
 
-- **Node.js**: v14.13.0 或更高版本（支持ES模块）
-- **依赖**: 仅需 `ejs` 作为模板引擎
+## Installation
 
-## 安装
-
-### 本地安装（推荐）
+### Local Installation (Recommended)
 
 ```bash
 npm install joe-audit --save-dev
 ```
 
-### 全局安装
+### Global Installation
 
 ```bash
 npm install -g joe-audit
 ```
 
-## 快速开始
+## Quick Start
 
-### 命令行使用
+### Command-line Usage
 
-#### 基本用法
+#### Basic Usage
 
 ```bash
-# 交互式审计当前目录
+# Interactive audit of current directory
 joe-audit
 
-# 审计指定本地目录
+# Audit specified local directory
 joe-audit /path/to/your/project
 
-# 审计远程仓库
+# Audit remote repository
 joe-audit https://github.com/yourusername/your-repo
 ```
 
-#### 自定义输出文件
+#### Custom Output File
 
 ```bash
-# 审计当前目录并指定输出文件
+# Audit current directory and specify output file
 joe-audit -o my-audit.md
 
-# 审计指定目录并自定义输出
+# Audit specified directory and customize output
 joe-audit /path/to/project -o project-audit.md
 
-# 审计远程仓库并自定义输出
+# Audit remote repository and customize output
 joe-audit https://github.com/yourusername/your-repo -o repo-audit.md
 ```
 
-## 可用命令别名
+## Available Command Aliases
 
-该工具提供了多种命令别名，您可以根据个人偏好选择使用：
+The tool provides multiple command aliases, you can choose to use according to your personal preference:
 
-- `joe-audit` (推荐)
+- `joe-audit` (Recommended)
 - `joeaudit`
 - `joeAudit`
 - `JoeAudit`
 
-## 命令参数
+## Command Parameters
 
-| 参数 | 简写 | 描述 |
-|------|------|------|
-| `<target>` | - | 审计目标，可以是本地目录路径或远程仓库URL |
-| `--output <filename>` | `-o` | 自定义审计报告输出文件名<br/>默认: joe-audit-result-YYYYMMDDHHMMSS.md |
-| `--help` | `-h` | 显示帮助信息 |
-| `--version` | `-v` | 显示当前版本 |
+| Parameter | Short | Description |
+|-----------|-------|-------------|
+| `<target>` | - | Audit target, which can be a local directory path or remote repository URL |
+| `--output <filename>` | `-o` | Custom audit report output filename<br/>Default: joe-audit-result-YYYYMMDDHHMMSS.md |
+| `--help` | `-h` | Show help information |
+| `--version` | `-v` | Show current version |
 
-## 帮助命令
+## Help Command
 
 ```bash
 joe-audit --help
 ```
 
-## 作为Node.js模块使用
+## Usage as Node.js Module
 
 ```javascript
 import { auditPackage } from 'joe-audit';
 
-// 审计本地工程
+// Audit local project
 await auditPackage('/path/to/local/project', 'audit-result.md');
 
-// 审计远程仓库
+// Audit remote repository
 await auditPackage('https://github.com/yourusername/your-repo', 'repo-audit.md');
 ```
 
@@ -105,75 +103,78 @@ await auditPackage('https://github.com/yourusername/your-repo', 'repo-audit.md')
 
 #### `auditPackage(projectRoot, outputFile)`
 
-执行前端依赖安全审计。
+Execute frontend dependency security audit.
 
-**参数：**
-- `projectRoot` (string): 项目根目录路径或远程仓库URL
-- `outputFile` (string): 审计报告输出文件名
+**Parameters:**
+- `projectRoot` (string): Project root directory path or remote repository URL
+- `outputFile` (string): Audit report output filename
 
-**返回值：**
-- `Promise<void>`: 审计完成后解析的Promise
+**Return Value:**
+- `Promise<void>`: Promise resolved after audit completion
 
-## 进度展示
+## Progress Display
 
-在审计过程中，工具会实时显示一个进度条，让您了解当前审计的进展情况：
+During the audit process, the tool will display a progress bar in real-time, allowing you to understand the current audit progress:
 
-### 进度条信息
+### Progress Bar Information
 
-进度条包含以下信息：
-- **完成百分比**：显示审计的整体进度
-- **当前阶段**：显示审计的当前步骤（共7个步骤）
-- **动画效果**：在耗时步骤中显示旋转动画（| → / → - → \）
+The progress bar includes the following information:
+- **Completion percentage**: Shows the overall progress of the audit
+- **Current stage**: Shows the current step of the audit (7 steps total)
+- **Animation effect**: Shows a rotation animation in time-consuming steps (| → / → - → \)
 
-### 审计步骤
+### Audit Steps
 
-完整的审计流程包括以下7个步骤：
-1. 创建临时工作目录
-2. 解析项目结构和依赖信息
-3. 生成依赖锁定文件
-4. 执行安全审计
-5. 生成审计报告
-6. 清理临时文件
-7. 保存审计结果
+The complete audit process includes the following 7 steps:
+1. Create temporary working directory
+2. Parse project structure and dependency information
+3. Generate dependency lock file
+4. Execute security audit
+5. Generate audit report
+6. Clean up temporary files
+7. Save audit results
 
-### 进度条示例
+### Progress Bar Example
 ```
 进度: [██████████████████░░░░░░░░░░░░░░░░░░░░░] 50% | 阶段: 步骤 4/7 | 执行安全审计 /
 ```
 
-## 审计报告格式
+## Audit Report Format
 
-生成的Markdown报告包含以下内容：
-- 项目名称和审计标题
-- 审计结果摘要
-- 漏洞详情（如果有）：
-  - 漏洞等级（高危/中危/低危）
-  - 漏洞描述
-  - 影响的包和版本
-  - 修复建议
+The generated Markdown report contains the following content:
+- Project name and audit title
+- Audit results summary
+- Vulnerability details (if any):
+  - Vulnerability level (High/Medium/Low)
+  - Vulnerability description
+  - Affected packages and versions
+  - Fix recommendations
 
-## 示例输出
+## Example Output
 
 ```markdown
-# `your-project` 审计结果
+# `your-project` Audit Results
 
-## 审计摘要
+## Audit Summary
 
-✅ 未发现任何安全漏洞
+✅ No security vulnerabilities found
 
-所有直接依赖和间接依赖都通过了安全审计。
+All direct and indirect dependencies passed the security audit.
 ```
 
-## 许可证
+## License
 ISC
 
+## Contributing
 
-## 贡献
+Welcome to submit Issues and Pull Requests to help improve this tool!
 
-欢迎提交Issue和Pull Request来帮助改进这个工具！
+## Feedback
 
-## 问题反馈
-
-如果在使用过程中遇到任何问题，请在GitHub仓库提交Issue：
+If you encounter any problems during use, please submit an Issue on the GitHub repository:
 [https://github.com/qiao915/joe-audit/issues](https://github.com/qiao915/joe-audit/issues)
 
+## Languages
+
+- [English](README.md) (current)
+- [中文](README.CN.md)

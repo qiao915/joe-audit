@@ -48,7 +48,8 @@ const target = program.args[0];
 // 处理命令行参数
 async function processArgs() {
   let targetPath = target || '.';
-  let outputFile = options.output;
+  // 确保outputFile始终有值，使用默认生成函数
+  let outputFile = options.output || generateTimestampedFilename();
   let isRemote = targetPath.startsWith('http://') || targetPath.startsWith('https://');
 
   // 如果没有提供target参数，交互式询问
@@ -84,9 +85,9 @@ async function processArgs() {
 
   try {
     await auditPackage(targetPath, outputFile);
-    console.log(`\n✅ 审计完成！结果已保存到: ${outputFile}`);
   } catch (error) {
-    console.error(`\n❌ 审计失败: ${error.message}`);
+    console.error(`
+❌ 审计失败: ${error.message}`);
     process.exit(1);
   } finally {
     rl.close();

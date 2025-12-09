@@ -1,6 +1,6 @@
 {
   "name": "joe-audit",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "src/entry/index.js",
   "type": "module",
   "bin": {
