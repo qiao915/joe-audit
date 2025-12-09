@@ -4,6 +4,8 @@ import { generateLock } from '../generateLock/index.js';
 import { audit } from '../audit/index.js';
 import { render } from '../render/index.js';
 import fs from 'fs';
+import { generateTimestampedFilename } from '../common/utils.js';
+import cliProgress from 'cli-progress';
 
 /**
  * 根据项目根目录，审计项目中所有的包（含项目本身）
@@ -12,51 +14,127 @@ import fs from 'fs';
  */
 export async function auditPackage(projectRoot, savePath) {
   // 如果没有提供savePath，则生成带时间戳的默认文件名
-  if (!savePath) {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    savePath = `joe-audit-result-${year}${month}${day}-${hours}${minutes}${seconds}.md`;
+  const finalSavePath = savePath || generateTimestampedFilename();
+  
+  console.log(`开始审计: ${projectRoot}`);
+  console.log(`报告将保存到: ${finalSavePath}\n`);
+  
+  // 创建进度条实例
+  const progressBar = new cliProgress.SingleBar({
+    format: '进度: [{bar}] {percentage}% | 阶段: {stage} | {message}',
+    barCompleteChar: '█',
+    barIncompleteChar: '░',
+    hideCursor: true,
+    stopOnComplete: true
+  });
+  
+  const totalSteps = 7;
+  let currentStep = 0;
+  
+  progressBar.start(totalSteps, 0, {
+    stage: '准备中',
+    message: '初始化审计流程'
+  });
+  
+  let workDir;
+  try {
+    // 1. 创建工作目录
+    currentStep++;
+    progressBar.update(currentStep, {
+      stage: '步骤 1/7',
+      message: '创建临时工作目录'
+    });
+    workDir = await createWorkDir();
+    
+    // 2. 解析项目，向工作目录添加package.json
+    currentStep++;
+    progressBar.update(currentStep, {
+      stage: '步骤 2/7',
+      message: '解析项目结构和依赖信息'
+    });
+    const packageJson = await parseProject(projectRoot);
+    
+    // 判断是否是远程仓库
+    const isRemote = typeof projectRoot === 'string' && (projectRoot.startsWith('http://') || projectRoot.startsWith('https://'));
+    
+    // 3. 生成lock文件
+    currentStep++;
+    progressBar.update(currentStep, {
+      stage: '步骤 3/7',
+      message: '生成依赖锁定文件'
+    });
+    await generateLock(workDir, packageJson, isRemote ? projectRoot : null);
+    
+    // 4. 对工作目录进行审计
+    currentStep++;
+    progressBar.update(currentStep, {
+      stage: '步骤 4/7',
+      message: '执行安全审计（可能需要较长时间）'
+    });
+    const auditResult = await audit(workDir, packageJson);
+    
+    // 5. 渲染审计结果
+    currentStep++;
+    progressBar.update(currentStep, {
+      stage: '步骤 5/7',
+      message: '生成审计报告'
+    });
+    const renderedResult = await render(auditResult, packageJson, projectRoot);
+    
+    // 6. 删除工作目录
+    currentStep++;
+    progressBar.update(currentStep, {
+      stage: '步骤 6/7',
+      message: '清理临时文件'
+    });
+    await deleteWorkDir(workDir);
+    workDir = null; // 标记为已清理
+    
+    // 7. 将结果保存到指定路径
+    currentStep++;
+    progressBar.update(currentStep, {
+      stage: '步骤 7/7',
+      message: '保存审计结果'
+    });
+    await fs.promises.writeFile(finalSavePath, renderedResult);
+    
+    // 完成进度条
+    progressBar.update(totalSteps, {
+      stage: '完成',
+      message: '审计流程已完成'
+    });
+    progressBar.stop();
+    
+    console.log(`\n✅ 审计完成！`);
+    console.log(`报告已保存到: ${finalSavePath}`);
+    
+    return {
+      reportPath: finalSavePath,
+      result: auditResult
+    };
+  } catch (error) {
+    // 停止进度条并显示错误
+    progressBar.stop();
+    
+    console.error(`\n❌ 审计失败: ${error.message}`);
+    
+    // 显示更多错误详情（仅在开发模式或需要调试时）
+    if (process.env.DEBUG) {
+      console.error('详细错误信息:', error);
+    }
+    
+    // 重新抛出错误，让上层处理
+    throw error;
+  } finally {
+    if (workDir) {
+      try {
+        // 确保临时目录被清理，即使中间步骤出错
+        await deleteWorkDir(workDir);
+        console.log('✅ 临时工作目录清理完成');
+      } catch (cleanupError) {
+        // 清理失败时不影响主流程
+        console.warn(`警告: 无法清理临时工作目录 ${workDir}: ${cleanupError.message}`);
+      }
+    }
   }
-  // 1. 创建工作目录
-  console.log('🔄 创建临时工作目录...');
-  const workDir = await createWorkDir();
-  console.log('✅ 临时工作目录创建完成');
-  
-  // 2. 解析项目，向工作目录添加pacakge.json
-  console.log('🔄 解析项目结构和依赖信息...');
-  const packageJson = await parseProject(projectRoot);
-  console.log('✅ 项目解析完成');
-  
-  // 判断是否是远程仓库
-  const isRemote = typeof projectRoot === 'string' && (projectRoot.startsWith('http://') || projectRoot.startsWith('https://'));
-  
-  // 3. 生成lock文件
-  console.log('🔄 生成依赖锁定文件...');
-  await generateLock(workDir, packageJson, isRemote ? projectRoot : null);
-  console.log('✅ 依赖锁定文件生成完成');
-  
-  // 4. 对工作目录进行审计
-  console.log('🔄 正在执行安全审计（可能需要较长时间）...');
-  const auditResult = await audit(workDir, packageJson);
-  console.log('✅ 安全审计完成');
-  
-  // 5. 渲染审计结果
-  console.log('🔄 生成审计报告...');
-  const renderedResult = await render(auditResult, packageJson, projectRoot);
-  console.log('✅ 审计报告生成完成');
-  
-  // 6. 删除工作目录
-  console.log('🔄 清理临时文件...');
-  await deleteWorkDir(workDir);
-  console.log('✅ 临时文件清理完成');
-  
-  // 7. 将结果保存到指定路径
-  console.log('🔄 保存审计结果...');
-  await fs.promises.writeFile(savePath, renderedResult);
-  console.log('✅ 审计结果保存完成');
 }

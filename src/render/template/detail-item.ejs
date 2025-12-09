@@ -21,10 +21,13 @@
 **漏洞包所在目录**：
 <% item.nodes.forEach((path) => { %>- `<%- path %>`
 <% }); %>
-<% if (item.fixAvailable) { %>
-**修复建议**：
+<% if (item.fixAvailable) { %>**修复建议**：
+<% if (item.fixAvailable.version) { %>
 - 将 `<%- item.name %>` 更新到版本 `<%- item.fixAvailable.version %>`
 <% if (item.fixAvailable.isSemVerMajor) { %>- 注意：这是一个主版本升级，可能包含不兼容的更改
+<% } %>
+<% } else { %>
+- 将 `<%- item.name %>` 更新到最新版本
 <% } %>
 <% } else { %>
 **修复建议**：

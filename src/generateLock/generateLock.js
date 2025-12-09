@@ -62,15 +62,15 @@ async function writePackageJson(workDir, packageJson) {
 
 // 创建 lock 文件
 async function createLockFile(workDir) {
-  // 使用 npm ci --only-lockfile 替代 npm install --package-lock-only
-  // npm ci 专为持续集成环境设计，速度更快，因为它跳过了某些检查和优化步骤
-  const cmd = `npm ci --only-lockfile`;
+  // 首先尝试使用 npm install --package-lock-only 来生成 package-lock.json
+  // 这个命令会解析依赖并生成锁定文件，但不会实际安装依赖
+  const cmd = `npm install --package-lock-only`;
   try {
     await runCommand(cmd, workDir); // 在工作目录中执行命令
   } catch (error) {
-    // 如果 npm ci 失败，回退到 npm install --package-lock-only
-    // console.warn('npm ci 失败，回退到 npm install --package-lock-only');
-    await runCommand(`npm install --package-lock-only --force`, workDir);
+    // 如果 npm install --package-lock-only 失败，尝试完整安装
+    // console.warn('npm install --package-lock-only 失败，尝试完整安装');
+    await runCommand(`npm install --force`, workDir);
   }
 }
 
