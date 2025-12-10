@@ -62,7 +62,7 @@ export function generateTimestampedFilename(prefix = 'joe-audit-result', extensi
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const seconds = String(now.getSeconds()).padStart(2, '0');
-  return `${prefix}-${year}${month}${day}-${hours}${minutes}${seconds}${extension}`;
+  return `${prefix}-${year}${month}${day}${hours}${minutes}${seconds}${extension}`;
 }
 
 export function getFilename(importMetaUrl) {

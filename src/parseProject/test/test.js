@@ -5,9 +5,9 @@ async function testLocalProject() {
   const localProjectPath = '/Users/yuanjin/Desktop/mcp-audit';
   try {
     const packageJson = await parseProject(localProjectPath);
-    console.log('本地项目解析成功:', packageJson);
+    console.log('Local project parsed successfully:', packageJson);
   } catch (error) {
-    console.error('本地项目解析失败:', error);
+    console.error('Local project parsing failed:', error);
   }
 }
 
@@ -16,9 +16,9 @@ async function testRemoteProject() {
   const remoteProjectUrl = 'https://github.com/webpack/webpack';
   try {
     const packageJson = await parseProject(remoteProjectUrl);
-    console.log('远程项目解析成功:', packageJson);
+    console.log('Remote project parsed successfully:', packageJson);
   } catch (error) {
-    console.error('远程项目解析失败:', error);
+    console.error('Remote project parsing failed:', error);
   }
 }
 

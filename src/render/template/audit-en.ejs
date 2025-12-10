@@ -1,0 +1,33 @@
+## Audit Summary
+
+Your audited project has a total of **<%- audit.summary.total %>** security vulnerabilities.
+
+Where:
+- **Critical**: <%- audit.summary.critical %>
+  - Critical vulnerabilities are considered extremely severe and should be fixed immediately.
+- **High**: <%- audit.summary.high %>
+  - High vulnerabilities are considered severe and should be fixed as soon as possible.
+- **Moderate**: <%- audit.summary.moderate %>
+  - Moderate vulnerabilities are considered moderately severe and can be fixed when time permits.
+- **Low**: <%- audit.summary.low %>
+  - Low vulnerabilities are considered minor and can be fixed according to your own needs.
+
+Description:
+- Critical vulnerabilities are considered extremely severe and should be fixed immediately.
+- High vulnerabilities are considered severe and should be fixed as soon as possible.
+- Moderate vulnerabilities are considered moderately severe and can be fixed when time permits.
+- Low vulnerabilities are considered minor and can be fixed according to your own needs.
+
+Below is the detailed information about the vulnerabilities:
+<% if (audit.summary.critical) { %>
+<%- include('./detail-en.ejs', {type:'critical'}); %>
+<% } %>
+<% if (audit.summary.high) { %>
+<%- include('./detail-en.ejs', {type:'high'}); %>
+<% } %>
+<% if (audit.summary.moderate) { %>
+<%- include('./detail-en.ejs', {type:'moderate'}); %>
+<% } %>
+<% if (audit.summary.low) { %>
+<%- include('./detail-en.ejs', {type:'low'}); %>
+<% } %>

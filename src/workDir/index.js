@@ -11,8 +11,8 @@ const workBasePath = join(basePath, 'work'); // 定义工作目录路径
   try {
     fs.mkdirSync(workBasePath, { recursive: true });
   } catch (error) {
-    console.error(`警告：无法创建基础工作目录 ${workBasePath}: ${error.message}`);
-    console.error(`这可能会影响审计功能的正常使用`);
+    console.error(`Warning: Failed to create base working directory ${workBasePath}: ${error.message}`);
+    console.error(`This may affect the normal operation of audit functions`);
   }
 })();
 
@@ -40,13 +40,13 @@ export async function deleteWorkDir(workDir) {
   try {
     // 验证工作目录是否在预期的基础路径内，防止误删
     if (!workDir.startsWith(workBasePath)) {
-      console.warn(`警告：尝试删除的工作目录 ${workDir} 不在预期路径内，跳过删除`);
+      console.warn(`Warning: The working directory ${workDir} to be deleted is not in the expected path, skipping deletion`);
       return;
     }
     await fs.promises.rm(workDir, { recursive: true, force: true });
   } catch (error) {
     // 清理失败时只记录警告，不影响主流程
-    console.warn(`警告：无法删除临时工作目录 ${workDir}: ${error.message}`);
-    console.warn(`您可以手动删除该目录以释放磁盘空间`);
+    console.warn(`Warning: Failed to delete temporary working directory ${workDir}: ${error.message}`);
+  console.warn(`You can manually delete this directory to free up disk space`);
   }
 }

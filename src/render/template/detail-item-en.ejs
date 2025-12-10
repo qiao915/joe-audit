@@ -1,0 +1,35 @@
+### `<%- item.name -%>`
+**Vulnerability Description**：
+<% item.problems.forEach((problem) => { %>- <%- problem.title %>
+  - npm Vulnerability ID：`<%- problem.source %>`
+  - Vulnerability Details：[<%- problem.url %>](<%- problem.url %>)
+  - Vulnerability Severity：<%- desc.severityLevelsEn[problem.severity] %>
+  - Affected Versions：`<%- problem.range %>`
+<% }); %>
+**Dependency Relationship**：
+<% if(item.depChains.length === 0) { -%>
+<% if(item.name === packageJson.name) { -%>Current Project
+<% } else { -%>- `<%- packageJson.name %>/<%- item.name %>`
+<% } -%>
+<% } else { -%>
+<% item.depChains.forEach((chain) => { -%>
+<% if(chain.length === 1 && chain[0] === packageJson.name) { -%>Current Project
+<% } else { -%>- `<%- packageJson.name %>/<%- chain.join('/') %>`
+<% } -%>
+<% }); -%>
+<% } -%>
+**Vulnerability Package Directory**：
+<% item.nodes.forEach((path) => { %>- `<%- path %>`
+<% }); %>
+<% if (item.fixAvailable) { %>**Fix Recommendation**：
+<% if (item.fixAvailable.version) { %>
+- Update `<%- item.name %>` to version `<%- item.fixAvailable.version %>`
+<% if (item.fixAvailable.isSemVerMajor) { %>- Note: This is a major version upgrade and may contain incompatible changes
+<% } %>
+<% } else { %>
+- Update `<%- item.name %>` to the latest version
+<% } %>
+<% } else { %>
+**Fix Recommendation**：
+- No automatic fix recommendations are currently available. Please follow official announcements or community solutions
+<% } %>

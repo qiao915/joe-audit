@@ -1,26 +1,54 @@
-# `<%- packageJson.name %>`审计结果
+# `<%- packageJson.name %>` Audit Result
+[跳转到中文内容](#chinese-section)
 
-## 检测目标
+## Detection Target
 <% if (targetPath.startsWith('http://') || targetPath.startsWith('https://')) { %>
-**链接地址:** <%- targetPath %>
+**Link Address:** <%- targetPath %>
 <% } else { %>
-**文件路径:** `<%- targetPath %>`
+**File Path:** `<%- targetPath %>`
+<% } %>
+<% if(audit.summary.total) { %>
+<%- include('./audit-en.ejs'); %>
+<%- include('./recommendations-en.ejs'); %>
+<% } %>
+<% if(audit.summary.total === 0) { %>
+<%- desc.translations.noVulnerabilitiesEn %>
+
+## Dependency Management Recommendations
+### Maintain Current Status
+- <%- desc.translations.projectStatusGoodEn %>
+- <%- desc.translations.continueCurrentPracticesEn %>
+
+### Continuous Improvement
+1. **Regular Audits**：<%- desc.translations.monthlyAuditsEn %>
+2. **Update Dependencies**：<%- desc.translations.updateToLatestSecureVersionsEn %>
+3. **Monitor Dependencies**：<%- desc.translations.useMonitoringToolsEn %>
+<% } %>
+
+---
+
+<a id="chinese-section"></a>
+# `<%- packageJson.name %>` <%- desc.translations.auditResult %>
+## <%- desc.translations.detectionTarget %>
+<% if (targetPath.startsWith('http://') || targetPath.startsWith('https://')) { %>
+**<%- desc.translations.linkAddress %>:** <%- targetPath %>
+<% } else { %>
+**<%- desc.translations.filePath %>:** `<%- targetPath %>`
 <% } %>
 <% if(audit.summary.total) { %>
 <%- include('./audit.ejs'); %>
 <%- include('./recommendations.ejs'); %>
 <% } %>
 <% if(audit.summary.total === 0) { %>
-你项目的所有直接依赖和间接依赖都没有发现任何风险漏洞。
+<%- desc.translations.noVulnerabilities %>
 
-## 依赖管理建议
+## <%- desc.translations.dependencyManagementRecommendations %>
+### <%- desc.translations.maintainCurrentStatus %>
+- <%- desc.translations.projectStatusGood %>
+- <%- desc.translations.continueCurrentPractices %>
 
-### 保持现状
-- 项目当前的依赖管理状况良好，没有发现任何风险漏洞
-- 建议继续保持当前的依赖管理实践
-
-### 持续改进
-1. **定期审计**：建议至少每月运行一次依赖审计，确保新发现的漏洞能够及时处理
-2. **更新依赖**：定期更新依赖到最新的安全版本
-3. **监控依赖**：考虑使用依赖监控工具，及时获取依赖的安全更新通知
+### <%- desc.translations.continuousImprovement %>
+1. **<%- desc.translations.regularAudits %>**：<%- desc.translations.monthlyAudits %>
+2. **<%- desc.translations.updateDependencies %>**：<%- desc.translations.updateToLatestSecureVersions %>
+3. **<%- desc.translations.monitorDependencies %>**：<%- desc.translations.useMonitoringTools %>
 <% } %>

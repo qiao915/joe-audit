@@ -1,56 +1,56 @@
-## 依赖管理建议
+## <%- desc.translations.dependencyManagementRecommendations %> / <%= desc.translations.dependencyManagementRecommendationsEn %>
 
-### 修复优先级建议
+### <%- desc.translations.fixPriorityRecommendations %> / <%= desc.translations.fixPriorityRecommendationsEn %>
 <% if (audit.summary.critical > 0) { %>
-1. **立即修复严重(Critical)漏洞**：
-   - 这些漏洞可能导致系统被完全控制或数据泄露
-   - 建议在24小时内修复所有严重漏洞
+1. **<%= desc.translations.fixCriticalImmediately %>**：
+   - <%= desc.translations.criticalImpact %>
+   - <%= desc.translations.fixCriticalWithin24h %>
 <% } %>
 <% if (audit.summary.high > 0) { %>
-2. **尽快修复高危(High)漏洞**：
-   - 这些漏洞可能导致重要功能被破坏或敏感信息泄露
-   - 建议在7天内修复所有高危漏洞
+2. **<%= desc.translations.fixHighAsSoonAsPossible %>**：
+   - <%= desc.translations.highImpact %>
+   - <%= desc.translations.fixHighWithin7d %>
 <% } %>
 <% if (audit.summary.moderate > 0) { %>
-3. **计划修复中危(Moderate)漏洞**：
-   - 这些漏洞在特定条件下可能被利用
-   - 建议在下一个版本更新中修复所有中危漏洞
+3. **<%= desc.translations.fixModeratePlanned %>**：
+   - <%= desc.translations.moderateImpact %>
+   - <%= desc.translations.fixModerateInNextRelease %>
 <% } %>
 <% if (audit.summary.low > 0) { %>
-4. **评估修复低危(Low)漏洞**：
-   - 这些漏洞通常影响较小
-   - 建议根据项目实际情况评估是否需要修复
+4. **<%= desc.translations.fixLowEvaluate %>**：
+   - <%= desc.translations.lowImpact %>
+   - <%= desc.translations.fixLowBasedOnSituation %>
 <% } %>
 
-### 依赖版本管理建议
+### <%- desc.translations.dependencyVersionManagement %> / <%= desc.translations.dependencyVersionManagementEn %>
 
-1. **使用固定版本号**：
-   - 避免在package.json中使用波浪号(~)或插入符号(^)指定版本
-   - 使用精确版本号可以避免意外引入有漏洞的依赖版本
+1. **<%= desc.translations.useFixedVersion %> / <%= desc.translations.useFixedVersionEn %>**：
+   - <%= desc.translations.avoidTildeCaret %>
+   - <%= desc.translations.useExactVersion %>
 
-2. **定期更新依赖**：
-   - 使用`npm outdated`命令检查过时的依赖
-   - 考虑使用`npm-check-updates`或类似工具批量更新依赖
-   - 定期更新依赖可以获取安全修复和性能改进
+2. **<%= desc.translations.updateDependenciesRegularly %> / <%= desc.translations.updateDependenciesRegularlyEn %>**：
+   - <%= desc.translations.useNpmOutdated %>
+   - <%= desc.translations.useNcuTool %>
+   - <%= desc.translations.updateForSecurity %>
 
-3. **移除未使用的依赖**：
-   - 定期检查并移除项目中不再使用的依赖
-   - 减少依赖数量可以降低安全风险和项目复杂度
+3. **<%= desc.translations.removeUnusedDependencies %> / <%= desc.translations.removeUnusedDependenciesEn %>**：
+   - <%= desc.translations.checkAndRemove %>
+   - <%= desc.translations.reduceDependencyCount %>
 
-4. **使用依赖锁定文件**：
-   - 确保项目中包含package-lock.json或yarn.lock文件
-   - 锁定文件可以确保团队成员和部署环境使用相同版本的依赖
+4. **<%= desc.translations.useLockFiles %> / <%= desc.translations.useLockFilesEn %>**：
+   - <%= desc.translations.includeLockFiles %>
+   - <%= desc.translations.lockFilesBenefit %>
 
-### 安全审计建议
+### <%- desc.translations.securityAuditRecommendations %> / <%= desc.translations.securityAuditRecommendationsEn %>
 
-1. **集成到CI/CD流程**：
-   - 将依赖审计集成到持续集成/持续部署流程中
-   - 在代码提交或部署前自动运行依赖审计
+1. **<%= desc.translations.integrateWithCicd %> / <%= desc.translations.integrateWithCicdEn %>**：
+   - <%= desc.translations.integrateAuditIntoCicd %>
+   - <%= desc.translations.runAuditBeforeDeploy %>
 
-2. **定期手动审计**：
-   - 即使依赖没有变化，也建议定期手动运行依赖审计
-   - 新的漏洞可能在依赖发布后被发现
+2. **<%= desc.translations.manualAuditsRegularly %> / <%= desc.translations.manualAuditsRegularlyEn %>**：
+   - <%= desc.translations.runManualAudits %>
+   - <%= desc.translations.newVulnerabilitiesFound %>
 
-3. **关注安全公告**：
-   - 关注常用依赖的安全公告和更新
-   - 考虑使用安全监控服务跟踪依赖的安全状态
+3. **<%= desc.translations.followSecurityAnnouncements %> / <%= desc.translations.followSecurityAnnouncementsEn %>**：
+   - <%= desc.translations.followDependenciesUpdates %>
+   - <%= desc.translations.useSecurityMonitoring %>

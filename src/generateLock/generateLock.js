@@ -60,18 +60,12 @@ async function writePackageJson(workDir, packageJson) {
   );
 }
 
-// 创建 lock 文件
+// 创建 lock 文件并安装依赖
 async function createLockFile(workDir) {
-  // 首先尝试使用 npm install --package-lock-only 来生成 package-lock.json
-  // 这个命令会解析依赖并生成锁定文件，但不会实际安装依赖
-  const cmd = `npm install --package-lock-only`;
-  try {
-    await runCommand(cmd, workDir); // 在工作目录中执行命令
-  } catch (error) {
-    // 如果 npm install --package-lock-only 失败，尝试完整安装
-    // console.warn('npm install --package-lock-only 失败，尝试完整安装');
-    await runCommand(`npm install --force`, workDir);
-  }
+  // 使用完整安装命令，确保依赖被实际安装
+  // 这样 npm audit 才能正确检测到漏洞
+  const cmd = `npm install --force`;
+  await runCommand(cmd, workDir); // 在工作目录中执行命令
 }
 
 export async function generateLock(workDir, packageJson, repoUrl = null) {
@@ -88,7 +82,7 @@ export async function generateLock(workDir, packageJson, repoUrl = null) {
     
     // 如果缓存文件存在，则使用缓存
     if (fs.existsSync(cachedLockFile) && fs.existsSync(cachedPackageJson)) {
-      console.log('🔄 使用缓存的依赖锁定文件');
+      console.log('🔄 Using cached dependency lock file');
       // 复制缓存文件到工作目录
       await fs.promises.copyFile(cachedLockFile, lockFilePath);
       await fs.promises.copyFile(cachedPackageJson, packageJsonPath);
@@ -113,7 +107,7 @@ export async function generateLock(workDir, packageJson, repoUrl = null) {
       // 保存到缓存
       await fs.promises.copyFile(lockFilePath, cachedLockFile);
       await fs.promises.copyFile(packageJsonPath, cachedPackageJson);
-      console.log('🔄 依赖锁定文件已缓存');
+      console.log('🔄 Dependency lock file cached')
     }
   }
 }

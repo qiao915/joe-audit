@@ -1,0 +1,56 @@
+## Dependency Management Recommendations
+
+### Fix Priority Recommendations
+<% if (audit.summary.critical > 0) { %>
+1. **Fix Critical Vulnerabilities Immediately**：
+   - These vulnerabilities may lead to complete system control or data leakage
+   - It is recommended to fix all critical vulnerabilities within 24 hours
+<% } %>
+<% if (audit.summary.high > 0) { %>
+2. **Fix High Vulnerabilities As Soon As Possible**：
+   - These vulnerabilities may lead to important functionality disruption or sensitive information leakage
+   - It is recommended to fix all high vulnerabilities within 7 days
+<% } %>
+<% if (audit.summary.moderate > 0) { %>
+3. **Plan to Fix Moderate Vulnerabilities**：
+   - These vulnerabilities may be exploited under specific conditions
+   - It is recommended to fix all moderate vulnerabilities in the next version update
+<% } %>
+<% if (audit.summary.low > 0) { %>
+4. **Evaluate Fixing Low Vulnerabilities**：
+   - These vulnerabilities usually have minor impacts
+   - It is recommended to evaluate whether to fix based on the actual project situation
+<% } %>
+
+### Dependency Version Management Recommendations
+
+1. **Use Fixed Version Numbers**：
+   - Avoid using tilde (~) or caret (^) in package.json to specify versions
+   - Using exact version numbers can avoid accidentally introducing vulnerable dependency versions
+
+2. **Update Dependencies Regularly**：
+   - Use the `npm outdated` command to check for outdated dependencies
+   - Consider using `npm-check-updates` or similar tools to batch update dependencies
+   - Regularly updating dependencies can obtain security fixes and performance improvements
+
+3. **Remove Unused Dependencies**：
+   - Regularly check and remove dependencies that are no longer used in the project
+   - Reducing the number of dependencies can lower security risks and project complexity
+
+4. **Use Dependency Lock Files**：
+   - Ensure that the project includes package-lock.json or yarn.lock files
+   - Lock files can ensure that team members and deployment environments use the same dependency versions
+
+### Security Audit Recommendations
+
+1. **Integrate with CI/CD Pipeline**：
+   - Integrate dependency audits into the continuous integration/continuous deployment pipeline
+   - Automatically run dependency audits before code submission or deployment
+
+2. **Regular Manual Audits**：
+   - It is recommended to regularly run manual dependency audits even if dependencies have not changed
+   - New vulnerabilities may be discovered after dependencies are released
+
+3. **Follow Security Announcements**：
+   - Follow security announcements and updates for commonly used dependencies
+   - Consider using security monitoring services to track the security status of dependencies
